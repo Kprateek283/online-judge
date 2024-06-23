@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [userData, setUserData] = useState(null);
-  const [cookies] = useCookies(['userID']);
+  const [cookies, setCookie, removeCookie] = useCookies(['userEmail']);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,26 +40,123 @@ const Profile = () => {
       console.error('Error deleting account:', error.message);
     }
   };
+  const handleLogout = () => {
+    removeCookie("userEmail"); // Remove the userEmail cookie
+    navigate("/login"); // Redirect to login page after logout
+  };
 
   return (
-    <div>
-      <nav>
-        <button onClick={() => navigate('/home')}>Home</button>
-        <button onClick={() => navigate('/problemList')}>Problem List</button>
-        <button onClick={handleDeleteAccount}>Delete Account</button>
+    <div style={{ fontFamily: "Arial, sans-serif", color: "#333" }}>
+      <nav style={{ marginBottom: "20px" }}>
+        <button
+          onClick={() => navigate("/home")}
+          style={{
+            marginRight: "10px",
+            padding: "8px 16px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+            backgroundColor: "#007BFF",
+            color: "#fff",
+            cursor: "pointer"
+          }}
+        >
+          Home
+        </button>
+        <button
+            style={{
+              marginRight: "1rem",
+              marginBottom: "16px",
+              padding: "8px",
+              backgroundColor: "#4CAF50",
+              color: "#fff",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer"
+            }}
+            onClick={() => navigate(-1)}
+          >
+            Back
+          </button>
+          <button
+          onClick={handleLogout}
+          style={{
+            marginRight: "1rem",
+            padding: "0.5rem 1rem",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          Log Out
+        </button>
+        <button
+          onClick={() => navigate("/problemList")}
+          style={{
+            marginRight: "10px",
+            padding: "8px 16px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+            backgroundColor: "#007BFF",
+            color: "#fff",
+            cursor: "pointer"
+          }}
+        >
+          Problem List
+        </button>
+        <button
+          onClick={() => navigate("/updateProfile")}
+          style={{
+            marginRight: "10px",
+            padding: "8px 16px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+            backgroundColor: "#007BFF",
+            color: "#fff",
+            cursor: "pointer"
+          }}
+        >
+          Update Profile
+        </button>
+        <button
+          onClick={handleDeleteAccount}
+          style={{
+            padding: "8px 16px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+            backgroundColor: "#DC3545",
+            color: "#fff",
+            cursor: "pointer"
+          }}
+        >
+          Delete Account
+        </button>
       </nav>
-      <div className="profile-info">
+      <div>
         {userData && (
           <div>
             <h2>User Profile</h2>
-            <p><strong>Name:</strong> {userData.username}</p>
-            <p><strong>Email:</strong> {userData.email}</p>
-            <p><strong>Role:</strong> {userData.role === 1 ? 'Admin' : 'User'}</p>
+            <p>
+              <strong>Name:</strong> {userData.username}
+            </p>
+            <p>
+              <strong>Email:</strong> {userData.email}
+            </p>
+            <p>
+              <strong>Role:</strong>{" "}
+              {userData.role === 1 ? "Admin" : "User"}
+            </p>
+            <p>
+              <strong>Problems Solved:</strong>{" "}
+              {userData.problemsSolved.length}
+            </p>
           </div>
         )}
       </div>
     </div>
   );
+  
 };
 
 export default Profile;

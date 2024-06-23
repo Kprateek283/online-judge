@@ -1,30 +1,53 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams, Link, useNavigate } from "react-router-dom";
+import Editor from 'react-simple-code-editor';
+import { highlight, languages } from 'prismjs/components/prism-core';
+import 'prismjs/components/prism-clike';
+import 'prismjs/components/prism-javascript';
+import 'prismjs/themes/prism.css';
+
 
 const getDefaultBoilerplate = (language) => {
   switch (language) {
-    case "C":
+    case "c":
       return '#include <stdio.h>\nint main() {\n    printf("Hello, World!");\n    return 0;\n}';
-    case "C++":
+    case "cpp":
       return '#include <iostream>\nint main() {\n    std::cout << "Hello, World!";\n    return 0;\n}';
-    case "Java":
+    case "java":
       return 'public class Main {\n    public static void main(String[] args) {\n        System.out.println("Hello, World!");\n    }\n}';
-    case "Python":
+    case "python":
     default:
       return 'print("Hello, World!")';
   }
 };
 
+const getCookieValue = (cookieName) => {
+  const name = cookieName + "=";
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookie.split(';');
+  for (let i = 0; i < cookieArray.length; i++) {
+    let cookie = cookieArray[i];
+    while (cookie.charAt(0) === ' ') {
+      cookie = cookie.substring(1);
+    }
+    if (cookie.indexOf(name) === 0) {
+      return cookie.substring(name.length, cookie.length);
+    }
+  }
+  return "";
+};
+
 const IndividualProblem = () => {
   const [problemData, setProblemData] = useState(null);
-  const [selectedLanguage, setSelectedLanguage] = useState("Python");
+  const [selectedLanguage, setSelectedLanguage] = useState("python");
   const { id } = useParams();
   const navigate = useNavigate();
   const [code, setCode] = useState(getDefaultBoilerplate(selectedLanguage));
   const [output, setOutput] = useState("");
   const [verdict, setVerdict] = useState("Not Applicable");
   const [input, setInput] = useState("");
+  
 
   useEffect(() => {
     const fetchProblemData = async () => {
@@ -74,11 +97,14 @@ const IndividualProblem = () => {
   const handleSubmitClick = async () => {
     try {
       console.log(problemData);
+       // Extract and log the userEmail cookie
+    const userEmail = getCookieValue("userEmail");
+    console.log( userEmail);
 
       const payload = {
         language: selectedLanguage.toLowerCase(),
         code,
-
+        userEmail,
       };
 
       // Log the payload to ensure it's being created correctly
@@ -92,10 +118,11 @@ const IndividualProblem = () => {
         }
       );
       console.log(data);
-      if (data.correct === 1) {
+      console.log(data.success);
+      if (data.success === true) {
         setVerdict("Code accepted");
       } else {
-        setVerdict(`Code not accepted, error on test case ${data.failedTestCase}`);
+        setVerdict(`Code not accepted, ${data.message}`);
       }
     } catch (error) {
       console.error("Error in submitCode:", error);
@@ -110,114 +137,251 @@ const IndividualProblem = () => {
   return (
     <div
       style={{
-        backgroundImage: "linear-gradient(#00d5ff,#0095ff,rgba(93,0,255,.555))",
+        backgroundImage: "linear-gradient(#00d5ff, #0095ff, rgba(93, 0, 255, .555))",
+        height: "100vh",
+        fontFamily: "Arial, sans-serif",
+        color: "#333"
       }}
-      className="vh-100"
     >
-      <br></br>
-      <br></br>
-      <br></br>
-      <div className="d-flex justify-content-around p-5 bg-dark w-100">
-        <Link className="btn btn-primary" to="/Profile">
+      <br />
+      <br />
+      <br />
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-around",
+          padding: "20px",
+          backgroundColor: "dark",
+          width: "100%"
+        }}
+      >
+        <Link
+          to="/Profile"
+          style={{
+            textDecoration: "none",
+            color: "#fff",
+            padding: "8px",
+            borderRadius: "4px",
+            backgroundColor: "#4CAF50"
+          }}
+        >
           Profile
         </Link>
-        <Link className="btn btn-primary" to="/Home">
+        <Link
+          to="/Home"
+          style={{
+            textDecoration: "none",
+            color: "#fff",
+            padding: "8px",
+            borderRadius: "4px",
+            backgroundColor: "#4CAF50"
+          }}
+        >
           Home
         </Link>
-        <Link className="btn btn-primary" to="/Login">
+        <Link
+          to="/Login"
+          style={{
+            textDecoration: "none",
+            color: "#fff",
+            padding: "8px",
+            borderRadius: "4px",
+            backgroundColor: "#4CAF50"
+          }}
+        >
           Logout
         </Link>
-        <Link className="btn btn-primary" to="/AddProblem">
+        <Link
+          to="/AddProblem"
+          style={{
+            textDecoration: "none",
+            color: "#fff",
+            padding: "8px",
+            borderRadius: "4px",
+            backgroundColor: "#4CAF50"
+          }}
+        >
           Add Problem
         </Link>
       </div>
-      <div className="d-flex h-100">
+      <div style={{ display: "flex", height: "100%" }}>
         {/* Left Side */}
-        <div className="w-50 p-4">
+        <div style={{ width: "50%", padding: "16px" }}>
           <button
-            className="btn btn-secondary mb-4"
+            style={{
+              marginBottom: "16px",
+              padding: "8px",
+              backgroundColor: "#4CAF50",
+              color: "#fff",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer"
+            }}
             onClick={() => navigate(-1)}
           >
             Back
           </button>
           {problemData ? (
-            <div className="card p-4">
-              <h2 className="mb-4">{problemData.title || "Problem Title"}</h2>
+            <div
+              style={{
+                padding: "16px",
+                border: "1px solid #ccc",
+                borderRadius: "8px",
+                backgroundColor: "#fff"
+              }}
+            >
+              <h2 style={{ marginBottom: "16px" }}>
+                {problemData.problemName || "Problem Title"}
+              </h2>
               <h3>Problem Statement:</h3>
               <p>{problemData.description.statement}</p>
               <h3>Difficulty:</h3>
               <p>{problemData.difficulty}</p>
               <h3>Example:</h3>
-              <div className="example-box mb-3">
+              <div style={{ marginBottom: "12px" }}>
                 <h4>Input</h4>
-                <div className="input-box p-3 mb-3 bg-light border rounded">
+                <div
+                  style={{
+                    padding: "12px",
+                    marginBottom: "12px",
+                    backgroundColor: "#f8f9fa",
+                    border: "1px solid #dee2e6",
+                    borderRadius: "4px"
+                  }}
+                >
                   {problemData.testCases[0].input}
                 </div>
                 <h4>Output</h4>
-                <div className="output-box p-3 mb-3 bg-light border rounded">
+                <div
+                  style={{
+                    padding: "12px",
+                    marginBottom: "12px",
+                    backgroundColor: "#f8f9fa",
+                    border: "1px solid #dee2e6",
+                    borderRadius: "4px"
+                  }}
+                >
                   {problemData.testCases[0].expectedOutput}
                 </div>
               </div>
-
-                <>
-                  <h3>Input Description:</h3>
-                  <p>{problemData.description.inputFormat}</p>
-                </>
-    
-                <>
-                  <h3>Output Description:</h3>
-                  <p>{problemData.description.outputFormat}</p>
-                </>
+  
+              <>
+                <h3>Input Description:</h3>
+                <p>{problemData.description.inputFormat}</p>
+              </>
+  
+              <>
+                <h3>Output Description:</h3>
+                <p>{problemData.description.outputFormat}</p>
+              </>
             </div>
           ) : (
             <p>Loading problem data...</p>
           )}
         </div>
         {/* Right Side */}
-        <div className="w-50 p-4 d-flex flex-column">
-          <div className="d-flex mb-3">
+        <div style={{ width: "50%", padding: "16px", display: "flex", flexDirection: "column" }}>
+          <div style={{ display: "flex", marginBottom: "12px" }}>
             <select
-              className="form-select me-2"
               value={selectedLanguage}
               onChange={handleLanguageChange}
+              style={{
+                marginRight: "8px",
+                padding: "8px",
+                borderRadius: "4px",
+                backgroundColor: "#fff",
+                color: "#333",
+                border: "1px solid #ccc"
+              }}
             >
-              <option value="C">C</option>
-              <option value="C++">C++</option>
-              <option value="Java">Java</option>
-              <option value="Python">Python</option>
+              <option value="c">C</option>
+              <option value="cpp">C++</option>
+              <option value="python">Python</option>
+              <option value="java">Java</option>
+              
             </select>
-            <button className="btn btn-primary me-2" onClick={handleRunClick}>
+            <button
+              style={{
+                marginRight: "8px",
+                padding: "8px",
+                borderRadius: "4px",
+                backgroundColor: "#4CAF50",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer"
+              }}
+              onClick={handleRunClick}
+            >
               Run
             </button>
-            <button className="btn btn-primary" onClick={handleSubmitClick}>
+            <button
+              style={{
+                padding: "8px",
+                borderRadius: "4px",
+                backgroundColor: "#4CAF50",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer"
+              }}
+              onClick={handleSubmitClick}
+            >
               Submit
             </button>
           </div>
-          <textarea
-            className="form-control mb-3"
-            style={{ backgroundColor: "#000", color: "#fff", height: "50vh" }}
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
-          />
-          <div className="flex-grow-1">
-            <div className="d-flex flex-column h-100">
+          <Editor
+          value={code}
+          onValueChange={code => setCode(code)}
+          highlight={code => highlight(code, languages.js)}
+          padding={10}
+          style={{
+            fontFamily: '"Fira code", "Fira Mono", monospace',
+            fontSize: 12,
+            outline: 'none',
+            border: 'none',
+            backgroundColor: '#ffffff',
+            height: '100%',
+            overflowY: 'auto'
+          }}
+        />
+          <div style={{ flexGrow: 1 }}>
+            <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
               <textarea
-                className="form-control mb-2"
-                style={{ flex: 1, backgroundColor: "#fff", color: "#000" }}
+                style={{
+                  flex: 1,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  marginBottom: "8px",
+                  borderRadius: "4px",
+                  padding: "12px",
+                  border: "1px solid #ccc"
+                }}
                 placeholder="Input"
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
               />
               <textarea
-                className="form-control mb-2"
-                style={{ flex: 1, backgroundColor: "#fff", color: "#000" }}
+                style={{
+                  flex: 1,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  marginBottom: "8px",
+                  borderRadius: "4px",
+                  padding: "12px",
+                  border: "1px solid #ccc"
+                }}
                 placeholder="Output"
                 value={output}
                 readOnly
               />
               <textarea
-                className="form-control"
-                style={{ flex: 1, backgroundColor: "#fff", color: "#000" }}
+                style={{
+                  flex: 1,
+                  backgroundColor: "#fff",
+                  color: "#000",
+                  borderRadius: "4px",
+                  padding: "12px",
+                  border: "1px solid #ccc"
+                }}
                 placeholder="Verdict"
                 value={verdict}
                 readOnly
@@ -228,6 +392,8 @@ const IndividualProblem = () => {
       </div>
     </div>
   );
+  
+  
 };
 
 export default IndividualProblem;

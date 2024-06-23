@@ -52,32 +52,103 @@ const Login = () => {
   
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-2xl font-semibold mb-6">Login</h2>
-      {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
+    <div style={{ fontFamily: "Arial, sans-serif", color: "#333" }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1.5rem' }}>Log In</h2>
+      {errorMessage && (
+        <div style={{ color: "red", marginBottom: "16px" }}>{errorMessage}</div>
+      )}
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium mb-2">Email</label>
-          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+        <div style={{ marginBottom: "16px" }}>
+          <label htmlFor="email">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            style={{
+              width: "100%",
+              padding: "8px",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+              marginBottom: "8px"
+            }}
+          />
         </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium mb-2">Password</label>
-          <div className="relative">
-            <input type={showPassword ? 'text' : 'password'} id="password" name="password" value={formData.password} onChange={handleChange} className="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
-            <button type="button" className="absolute inset-y-0 right-0 px-3 py-2" onClick={() => setShowPassword(!showPassword)}>
+        <div style={{ marginBottom: "16px" }}>
+          <label htmlFor="password">Password</label>
+          <div style={{ display: "flex" }}>
+            <input
+              type={showPassword ? 'text' : 'password'}
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              style={{
+                width: "calc(100% - 40px)",
+                padding: "8px",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                marginBottom: "8px"
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                padding: "8px",
+                borderRadius: "4px",
+                marginLeft: "8px",
+                backgroundColor: "#4CAF50",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer"
+              }}
+            >
               {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
         </div>
-        <button type="submit" className="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          style={{
+            backgroundColor: "#4CAF50",
+            color: "#fff",
+            padding: "12px 20px",
+            borderRadius: "4px",
+            border: "none",
+            cursor: "pointer",
+            fontSize: "16px"
+          }}
+        >
           {loading ? 'Logging in...' : 'Login'}
         </button>
       </form>
-      <div className="mt-4 text-center">
-        <p>Not a user? <button className="text-indigo-600 hover:underline" onClick={() => navigate('/signup')}>Signup</button></p>
+      <div style={{ marginTop: "16px" }}>
+        <p>
+          Not a user?{" "}
+          <button
+            onClick={() => navigate("/signup")}
+            style={{
+              backgroundColor: "#007BFF",
+              color: "#fff",
+              padding: "8px 12px",
+              borderRadius: "4px",
+              border: "none",
+              cursor: "pointer"
+            }}
+          >
+            Signup
+          </button>
+        </p>
       </div>
     </div>
   );
+  
+  
 };
 
 export default Login;

@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const Home = () => {
   const [profileData, setProfileData] = useState(null);
-  const [cookies, setCookie, removeCookie] = useCookies(['userID']);
+  const [cookies, setCookie, removeCookie] = useCookies(['userEmail']); // Change to 'userEmail' cookie
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -23,6 +23,7 @@ const Home = () => {
         const { success, profile } = response.data;
         if (success) {
           setProfileData(profile); // Store the profile data in state
+          setCookie('userEmail', email, { path: '/' }); // Store userEmail cookie with path '/'
         } else {
           console.error('Error fetching user profile');
         }
@@ -32,28 +33,51 @@ const Home = () => {
     };
   
     fetchProfile();
-  }, []);
-  
+  }, [cookies.userEmail, setCookie]); // Include cookies.userEmail and setCookie in dependency array
 
   const handleLogout = () => {
-    removeCookie('userID'); // Remove the userID cookie
+    removeCookie('userEmail'); // Remove the userEmail cookie
     navigate('/login'); // Redirect to login page after logout
   };
 
   return (
-    <div>
-      <nav>
-        <button onClick={handleLogout}>Log Out</button>
-        <button onClick={() => navigate('/profile')}>Profile</button>
-        <button onClick={() => navigate('/problemList')}>Problem List</button>
+    <div style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
+      <nav style={{ marginBottom: '2rem' }}>
+        <button 
+          onClick={handleLogout} 
+          style={{ marginRight: '1rem', padding: '0.5rem 1rem', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+        >
+          Log Out
+        </button>
+        <button 
+          onClick={() => navigate('/profile')} 
+          style={{ marginRight: '1rem', padding: '0.5rem 1rem', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+        >
+          Profile
+        </button>
+        <button 
+          onClick={() => navigate('/problemList')} 
+          style={{ marginRight: '1rem', padding: '0.5rem 1rem', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+        >
+          Problem List
+        </button>
+        <button 
+          onClick={() => navigate('/getLeaderboard')} 
+          style={{ padding: '0.5rem 1rem', backgroundColor: '#4CAF50', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+        >
+          Leaderboard
+        </button>
       </nav>
-      <div className="welcome-message">
-        {profileData && (
-          <p>Welcome Back <strong>{profileData.username}</strong></p>
+      <div>
+        {profileData ? (
+          <p style={{ fontSize: '1.2rem' }}>Welcome Back <strong>{profileData.username}</strong></p>
+        ) : (
+          <p>Loading profile...</p>
         )}
       </div>
     </div>
   );
+  
 };
 
 export default Home;

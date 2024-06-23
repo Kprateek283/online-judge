@@ -7,13 +7,16 @@ import '../src/App.css';
 import ProblemList from './components/problemList.jsx';
 import IndividualProblem from './components/individualProblem.jsx';
 import CreateProblem from './components/addProblem.jsx';
+import GetLeaderboard from './components/getLeaderboard.jsx';
+import UpdateProfile from './components/updateProfile.jsx';
+import UpdateProblem from './components/updateProblem.jsx';
 
 function App() {
   return (
     <div className="App">
       <BrowserRouter> 
         <Routes>
-          <Route path="/" element={<Login />} />
+          <Route path="/" element={<Login/>} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/login" element={<Login />} />
           <Route path="/home" element={<Home/>}/>
@@ -21,6 +24,9 @@ function App() {
           <Route path="problemList" element={<ProblemList/>}/>
           <Route path="/individualProblem/:id" element={<IndividualProblem/>} />
           <Route path ="/addProblem" element ={<CreateProblem/>}/>
+          <Route path="/getLeaderboard" element ={<GetLeaderboard/>}/>
+          <Route path="/updateProfile" element={<UpdateProfile/>}/>
+          <Route path="/updateProblem/:id" element={<UpdateProblem/>}/>
         </Routes>
       </BrowserRouter>
     </div>

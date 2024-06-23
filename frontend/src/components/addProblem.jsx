@@ -3,9 +3,12 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from 'react-cookie';
 
 const CreateProblem = () => {
-  const host = import.meta.env.VITE_BACKEND_URL; 
+  const [cookies, setCookie, removeCookie] = useCookies(['userEmail']);
+  const navigate = useNavigate();
+  const host = import.meta.env.VITE_BACKEND_URL;
   const [formData, setFormData] = useState({
     problemName: "",
     description: {
@@ -96,155 +99,367 @@ const CreateProblem = () => {
       alert("Error saving problem. Please try again.");
     }
   };
+  const handleLogout = () => {
+    removeCookie("userEmail"); // Remove the userEmail cookie
+    navigate("/login"); // Redirect to login page after logout
+  };
 
   return (
-    <div className="full">
-      <div className="form-container">
-        <h2 className="heading">CREATE A NEW PROBLEM</h2>
-        <form onSubmit={handleSubmit} className="form">
-          <div className="form-group">
-            <label>Title</label>
+    <div
+      style={{
+        maxWidth: "800px",
+        margin: "0 auto",
+        padding: "2rem",
+        backgroundColor: "#f9f9f9",
+        borderRadius: "8px",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      }}
+    >
+      <nav style={{ marginBottom: "2rem" }}>
+        <button
+          onClick={handleLogout}
+          style={{
+            marginRight: "1rem",
+            padding: "0.5rem 1rem",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          Log Out
+        </button>
+        <button
+          onClick={() => navigate("/home")}
+          style={{
+            marginRight: "10px",
+            padding: "8px 16px",
+            borderRadius: "4px",
+            border: "1px solid #ccc",
+            backgroundColor: "#007BFF",
+            color: "#fff",
+            cursor: "pointer",
+          }}
+        >
+          Home
+        </button>
+        <button
+            style={{
+              marginRight: "1rem",
+              marginBottom: "16px",
+              padding: "8px",
+              backgroundColor: "#4CAF50",
+              color: "#fff",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer"
+            }}
+            onClick={() => navigate(-1)}
+          >
+            Back
+          </button>
+        <button
+          onClick={() => navigate("/profile")}
+          style={{
+            marginRight: "1rem",
+            padding: "0.5rem 1rem",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          Profile
+        </button>
+        <button
+          onClick={() => navigate("/problemList")}
+          style={{
+            marginRight: "1rem",
+            padding: "0.5rem 1rem",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          Problem List
+        </button>
+        <button
+          onClick={() => navigate("/getLeaderboard")}
+          style={{
+            padding: "0.5rem 1rem",
+            backgroundColor: "#4CAF50",
+            color: "white",
+            border: "none",
+            borderRadius: "4px",
+            cursor: "pointer",
+          }}
+        >
+          Leaderboard
+        </button>
+      </nav>
+      <div>
+        <h2 style={{ textAlign: "center", marginBottom: "1.5rem" }}>
+          CREATE A NEW PROBLEM
+        </h2>
+        <form onSubmit={handleSubmit}>
+          <div style={{ marginBottom: "1rem" }}>
+            <label style={{ display: "block", marginBottom: "0.5rem" }}>
+              Title
+            </label>
             <input
               type="text"
               name="problemName"
               value={formData.problemName}
               onChange={handleChange}
               required
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+              }}
             />
           </div>
-          <div className="form-group">
-            <label>Statement</label>
+          <div style={{ marginBottom: "1rem" }}>
+            <label style={{ display: "block", marginBottom: "0.5rem" }}>
+              Statement
+            </label>
             <textarea
               id="statement"
               name="description.statement"
               value={formData.description.statement}
               onChange={handleChange}
               required
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                minHeight: "100px",
+              }}
             />
-            <label>Input Format</label>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "0.5rem",
+                marginTop: "1rem",
+              }}
+            >
+              Input Format
+            </label>
             <textarea
               id="inputFormat"
               name="description.inputFormat"
               value={formData.description.inputFormat}
               onChange={handleChange}
               required
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                minHeight: "100px",
+              }}
             />
-            <label>Output Format</label>
+            <label
+              style={{
+                display: "block",
+                marginBottom: "0.5rem",
+                marginTop: "1rem",
+              }}
+            >
+              Output Format
+            </label>
             <textarea
               id="outputFormat"
               name="description.outputFormat"
               value={formData.description.outputFormat}
               onChange={handleChange}
               required
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+                minHeight: "100px",
+              }}
             />
           </div>
-          <label className="taglabel">Tags:</label>
-          <br />
-          <br />
-          <div className="alltags">
+          <label style={{ display: "block", marginBottom: "0.5rem" }}>
+            Tags:
+          </label>
+          <div style={{ marginBottom: "1rem" }}>
             {formData.tags.map((tag, index) => (
-              <div key={index}>
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "0.5rem",
+                }}
+              >
                 <input
-                  className="individualtag"
                   type="text"
                   id={`tag-${index}`}
                   name={`tags.${index}`}
                   value={tag}
                   onChange={handleChange}
+                  style={{
+                    flex: 1,
+                    padding: "0.5rem",
+                    borderRadius: "4px",
+                    border: "1px solid #ccc",
+                  }}
                 />
                 <button
-                  className="individualtag removebutton"
                   type="button"
                   onClick={() => removeTag(index)}
+                  style={{
+                    marginLeft: "0.5rem",
+                    padding: "0.5rem",
+                    borderRadius: "4px",
+                    backgroundColor: "#ff4d4d",
+                    color: "#fff",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
                 >
                   Remove
                 </button>
               </div>
             ))}
+            <button
+              type="button"
+              onClick={addTag}
+              style={{
+                padding: "0.5rem 1rem",
+                borderRadius: "4px",
+                backgroundColor: "#4CAF50",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Add Tag
+            </button>
           </div>
-          <button type="button" onClick={addTag} className="addtagbutton">
-            Add Tag
-          </button>
-          <br />
-          <br />
-          <label className="testcaselabel">Test Cases:</label>
-          <div className="test-cases-container">
+          <label style={{ display: "block", marginBottom: "0.5rem" }}>
+            Test Cases:
+          </label>
+          <div style={{ marginBottom: "1rem" }}>
             {formData.testCases.map((testCase, index) => (
-              <div className="individualtestcase" key={index}>
+              <div key={index} style={{ marginBottom: "1rem" }}>
                 <label
                   htmlFor={`input-${index}`}
-                  style={{
-                    marginRight: "10px",
-                    fontFamily: "none",
-                    color: "black",
-                    fontSize: "25px",
-                    letterSpacing: "0px",
-                  }}
+                  style={{ display: "block", marginBottom: "0.5rem" }}
                 >
                   Input:
                 </label>
-
                 <textarea
                   id={`input-${index}`}
                   name={`testCases.${index}.input`}
                   value={testCase.input}
                   onChange={handleChange}
+                  style={{
+                    width: "100%",
+                    padding: "0.5rem",
+                    borderRadius: "4px",
+                    border: "1px solid #ccc",
+                    minHeight: "50px",
+                  }}
                 />
-                <br />
                 <label
                   htmlFor={`expectedOutput-${index}`}
                   style={{
-                    marginRight: "10px",
-                    fontFamily: "none",
-                    color: "black",
-                    fontSize: "25px",
-                    letterSpacing: "0px",
+                    display: "block",
+                    marginBottom: "0.5rem",
+                    marginTop: "1rem",
                   }}
                 >
                   Expected Output:
                 </label>
-
                 <textarea
                   id={`expectedOutput-${index}`}
                   name={`testCases.${index}.expectedOutput`}
                   value={testCase.expectedOutput}
                   onChange={handleChange}
+                  style={{
+                    width: "100%",
+                    padding: "0.5rem",
+                    borderRadius: "4px",
+                    border: "1px solid #ccc",
+                    minHeight: "50px",
+                  }}
                 />
                 <button
-                  className="removebutton"
                   type="button"
                   onClick={() => removeTest(index)}
+                  style={{
+                    marginTop: "0.5rem",
+                    padding: "0.5rem",
+                    borderRadius: "4px",
+                    backgroundColor: "#ff4d4d",
+                    color: "#fff",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
                 >
                   Remove
                 </button>
               </div>
             ))}
+            <button
+              type="button"
+              onClick={addTestCase}
+              style={{
+                padding: "0.5rem 1rem",
+                borderRadius: "4px",
+                backgroundColor: "#4CAF50",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Add Test Case
+            </button>
           </div>
-          <button
-            className="addtestcasebutton"
-            type="button"
-            onClick={addTestCase}
-          >
-            Add Test Case
-          </button>
-          <div className="selectdifficult1">
+          <div style={{ marginBottom: "1rem" }}>
             <select
               name="difficulty"
               value={formData.difficulty}
               onChange={handleChange}
+              style={{
+                width: "100%",
+                padding: "0.5rem",
+                borderRadius: "4px",
+                border: "1px solid #ccc",
+              }}
             >
               <option value="Easy">Easy</option>
               <option value="Medium">Medium</option>
               <option value="Hard">Hard</option>
             </select>
           </div>
-          <div className="buttondiv">
-            <button type="submit" className="button-container">
+          <div style={{ textAlign: "center" }}>
+            <button
+              type="submit"
+              style={{
+                padding: "0.75rem 1.5rem",
+                borderRadius: "4px",
+                backgroundColor: "#4CAF50",
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
               Create Problem
             </button>
           </div>
         </form>
-
         <ToastContainer />
       </div>
     </div>

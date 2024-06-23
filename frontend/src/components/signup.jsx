@@ -65,50 +65,51 @@ const Signup = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white shadow-md rounded-md">
-      <h2 className="text-2xl font-semibold mb-6">Sign Up</h2>
-      {errorMessage && <div className="text-red-500 mb-4">{errorMessage}</div>}
+    <div style={{ maxWidth: '28rem', margin: '0 auto', padding: '1.5rem', backgroundColor: 'white', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', borderRadius: '0.375rem' }}>
+      <h2 style={{ fontSize: '1.5rem', fontWeight: '600', marginBottom: '1.5rem' }}>Sign Up</h2>
+      {errorMessage && <div style={{ color: 'red', marginBottom: '1rem' }}>{errorMessage}</div>}
       <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label htmlFor="username" className="block text-sm font-medium mb-2">Username</label>
-          <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} className="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="username" style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>Username</label>
+          <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} style={{ width: '100%', border: '1px solid #d1d5db', borderRadius: '0.375rem', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', padding: '0.5rem', outline: 'none' }} required />
         </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-sm font-medium mb-2">Email</label>
-          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} className="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="email" style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>Email</label>
+          <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} style={{ width: '100%', border: '1px solid #d1d5db', borderRadius: '0.375rem', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', padding: '0.5rem', outline: 'none' }} required />
         </div>
-        <div className="mb-4">
-          <label htmlFor="password" className="block text-sm font-medium mb-2">Password</label>
-          <div className="relative">
-            <input type={showPassword ? 'text' : 'password'} id="password" name="password" value={formData.password} onChange={handleChange} className="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
-            <button type="button" className="absolute inset-y-0 right-0 px-3 py-2" onClick={() => setShowPassword(!showPassword)}>
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="password" style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>Password</label>
+          <div style={{ position: 'relative' }}>
+            <input type={showPassword ? 'text' : 'password'} id="password" name="password" value={formData.password} onChange={handleChange} style={{ width: '100%', border: '1px solid #d1d5db', borderRadius: '0.375rem', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', padding: '0.5rem', outline: 'none' }} required />
+            <button type="button" style={{ position: 'absolute', top: '50%', right: '0.75rem', transform: 'translateY(-50%)', background: 'none', border: 'none', padding: '0', cursor: 'pointer' }} onClick={() => setShowPassword(!showPassword)}>
               {showPassword ? 'Hide' : 'Show'}
             </button>
           </div>
         </div>
-        <div className="mb-4">
-          <label htmlFor="role" className="block text-sm font-medium mb-2">Role</label>
-          <select id="role" name="role" value={formData.role} onChange={handleChange} className="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required>
+        <div style={{ marginBottom: '1rem' }}>
+          <label htmlFor="role" style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>Role</label>
+          <select id="role" name="role" value={formData.role} onChange={handleChange} style={{ width: '100%', border: '1px solid #d1d5db', borderRadius: '0.375rem', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', padding: '0.5rem', outline: 'none' }} required>
             <option value="User">User</option>
             <option value="Admin">Admin</option>
           </select>
         </div>
         {formData.role === 'Admin' && (
-          <div className="mb-4">
-            <label htmlFor="secretKey" className="block text-sm font-medium mb-2">Secret Key</label>
-            <input type="password" id="secretKey" name="secretKey" value={formData.secretKey} onChange={handleChange} className="w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" required />
+          <div style={{ marginBottom: '1rem' }}>
+            <label htmlFor="secretKey" style={{ display: 'block', fontSize: '0.875rem', fontWeight: '500', marginBottom: '0.5rem' }}>Secret Key</label>
+            <input type="password" id="secretKey" name="secretKey" value={formData.secretKey} onChange={handleChange} style={{ width: '100%', border: '1px solid #d1d5db', borderRadius: '0.375rem', boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)', padding: '0.5rem', outline: 'none' }} required />
           </div>
         )}
-        <button type="submit" className="w-full bg-indigo-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:bg-indigo-700" disabled={loading}>
+        <button type="submit" style={{ width: '100%', backgroundColor: '#4f46e5', color: 'white', fontWeight: '600', padding: '0.5rem 1rem', borderRadius: '0.375rem', cursor: 'pointer', border: 'none' }} disabled={loading}>
           {loading ? 'Signing up...' : 'Sign Up'}
         </button>
       </form>
-      <div className="mt-4 flex justify-between">
-        <button className="text-indigo-600 hover:underline" onClick={() => navigate('/login')}>Already a Member? Login</button>
-        <button className="text-indigo-600 hover:underline" onClick={() => navigate('/login')}>Login</button>
+      <div style={{ marginTop: '1rem', display: 'flex', justifyContent: 'space-between' }}>
+        <button style={{ color: '#4f46e5', cursor: 'pointer', background: 'none', border: 'none', padding: '0' }} onClick={() => navigate('/login')}>Already a Member? Login</button>
+        <button style={{ color: '#4f46e5', cursor: 'pointer', background: 'none', border: 'none', padding: '0' }} onClick={() => navigate('/login')}>Login</button>
       </div>
     </div>
   );
+  
 };
 
 export default Signup;
