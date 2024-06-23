@@ -3,7 +3,7 @@ import fs from "fs";
 import { executeCode } from "./executecode.js";
 
 const runcode = async (req, res) => {
-    const { language = "cpp", code, input } = req.body;
+    const { language, code, input } = req.body;
     if (!code) {
       return res.status(400).json({ error: "Code  is required" });
     }
@@ -39,7 +39,7 @@ const runcode = async (req, res) => {
         .status(500)
         .json({ error: `Error writing input file: ${error.message}` });
     }
-    //  console.log(fs.readFileSync);
+    
     executeCode(
       language,
       codePath,
