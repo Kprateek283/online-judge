@@ -1,6 +1,6 @@
 import problem from "../models/problem.js";
 
-const update = async (req, res) => {
+const updateProblem = async (req, res) => {
     const { id } = req.params;
     const { statement, inputFormat, outputFormat } = req.body;
     const updatedFields = {
@@ -23,4 +23,4 @@ const update = async (req, res) => {
     }
   };
 
-  export default update;
+  export default updateProblem;

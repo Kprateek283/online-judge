@@ -29,6 +29,7 @@ app.use("/", router);
 
 // Start server
 const PORT = process.env.PORT || 8000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+const HOST = '0.0.0.0';  // Ensure to bind to all network interfaces
+app.listen(PORT, HOST, () => {
+  console.log(`Server running on http://${HOST}:${PORT}`);
 });
