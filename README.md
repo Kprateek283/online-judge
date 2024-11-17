@@ -72,5 +72,5 @@ For inquiries or support, please contact: kprateek283@gmail.com
 
 ### Note:
 - **License**: This project is licensed under the GNU General Public License v3.0
-- **Contribution**: Not open to contributions as per your note.
+- **Contribution**: Not open to contributions.
 
